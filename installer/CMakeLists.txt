@@ -1,0 +1,6 @@
+include(${CMAKE_SOURCE_DIR}/cmake/BodySyncRc.cmake)
+add_executable(bodysync_setup setup_tool.cpp)
+target_link_libraries(bodysync_setup PRIVATE bodysync_core)
+target_link_options(bodysync_setup PRIVATE -municode)
+set_target_properties(bodysync_setup PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/stage)
+bodysync_add_rc(bodysync_setup "BodySync driver registration helper" "bodysync_setup.exe" MANIFEST ${CMAKE_SOURCE_DIR}/resources/helper.manifest)

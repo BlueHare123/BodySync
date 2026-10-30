@@ -1,0 +1,6 @@
+{
+  "driver_bodysync": {
+    "enable": true,
+    "assignTrackerRoles": true
+  }
+}

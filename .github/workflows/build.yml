@@ -1,0 +1,28 @@
+name: build
+on: [push, pull_request]
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: sudo apt-get update && sudo apt-get install -y g++-mingw-w64-x86-64-posix ninja-build cmake nsis wine64 python3
+      - name: Localisation check
+        run: python3 scripts/check_i18n.py
+      - name: Dependencies (pinned SHA-256)
+        run: scripts/fetch_deps.sh
+      - name: Core tests (native)
+        run: cmake/native-tests.sh build-native
+      - name: Windows x64 cross build
+        run: |
+          cmake -S . -B build-win -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64-x86_64.cmake -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-win
+      - name: Tests under Wine
+        run: |
+          . scripts/wine-env.sh
+          (cd build-win && $WINE ./BodySyncTests.exe && $WINE ./DriverHarness.exe)
+          (cd build-win/stage && $WINE ./BodySync.exe --selftest)
+      - name: Package
+        run: scripts/package.sh
+      - uses: actions/upload-artifact@v4
+        with: { name: BodySync-v1.0.0, path: "dist/*.zip\ndist/*.exe\ndist/SHA256SUMS.txt" }

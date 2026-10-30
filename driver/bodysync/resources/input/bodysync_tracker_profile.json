@@ -1,0 +1,7 @@
+{
+  "jsonid": "input_profile",
+  "controller_type": "bodysync_tracker",
+  "device_class": "GenericTracker",
+  "resource_root": "{bodysync}",
+  "input_source": {}
+}

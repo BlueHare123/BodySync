@@ -1,0 +1,27 @@
+# build output
+build-*/
+build-results/
+dist/
+*.o
+*.obj
+*.exe
+*.dll
+!third_party/openvr/bin/win64/openvr_api.dll
+# local settings, logs, reports, backups
+*.corrupt-*
+*.bodysync-backup*
+*.log
+reports/
+logs/
+.wine*/
+# editors / OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+# secrets (never commit)
+*.pfx
+*.pem
+*.key
+.env

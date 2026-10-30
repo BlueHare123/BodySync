@@ -1,0 +1,20 @@
+include(${CMAKE_SOURCE_DIR}/cmake/BodySyncRc.cmake)
+add_library(bodysync_engine STATIC engine.cpp vr_source.cpp)
+target_include_directories(bodysync_engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${TP}/openvr/headers)
+target_link_libraries(bodysync_engine PUBLIC bodysync_core winmm)
+
+set(IMGUI ${TP}/imgui)
+add_library(imgui_lib STATIC ${IMGUI}/imgui.cpp ${IMGUI}/imgui_draw.cpp ${IMGUI}/imgui_tables.cpp ${IMGUI}/imgui_widgets.cpp
+  ${IMGUI}/backends/imgui_impl_win32.cpp ${IMGUI}/backends/imgui_impl_dx11.cpp)
+target_include_directories(imgui_lib PUBLIC ${IMGUI} ${IMGUI}/backends)
+target_compile_options(imgui_lib PRIVATE -w)
+target_link_libraries(imgui_lib PUBLIC d3d11 dxgi dwmapi gdi32 imm32 d3dcompiler)
+
+add_executable(BodySync WIN32 main.cpp app.cpp ui.cpp theme.cpp i18n.cpp selftest.cpp)
+target_include_directories(BodySync PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(BodySync PRIVATE bodysync_engine imgui_lib comdlg32 shell32 ole32 uuid)
+target_link_options(BodySync PRIVATE -mwindows -municode)
+set_target_properties(BodySync PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/stage)
+bodysync_add_rc(BodySync "BodySync full-body tracking" "BodySync.exe" ICON ${CMAKE_SOURCE_DIR}/resources/bodysync.ico MANIFEST ${CMAKE_SOURCE_DIR}/resources/app.manifest)
+add_custom_command(TARGET BodySync POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${TP}/openvr/bin/win64/openvr_api.dll ${CMAKE_BINARY_DIR}/stage/openvr_api.dll)
+add_custom_command(TARGET BodySync POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/fonts ${CMAKE_BINARY_DIR}/stage/fonts)

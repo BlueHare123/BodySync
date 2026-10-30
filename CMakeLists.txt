@@ -1,0 +1,51 @@
+cmake_minimum_required(VERSION 3.20)
+project(BodySync VERSION 1.0.0 LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+if(NOT WIN32)
+  message(WARNING "BodySync ships for Windows x64. Non-Windows builds only produce the portable core + tests.")
+endif()
+set(BS_VERSION "${PROJECT_VERSION}")
+set(TP ${CMAKE_SOURCE_DIR}/third_party)
+
+# ---- flags ----
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  add_compile_options(-Wall -Wextra -O2 -fno-strict-aliasing)
+  if(WIN32)
+    add_link_options(-static -static-libgcc -static-libstdc++ -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va)
+    add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX _WIN32_WINNT=0x0A00 UNICODE _UNICODE)
+  endif()
+endif()
+add_compile_definitions(BODYSYNC_VERSION="${BS_VERSION}")
+
+# ---- core (portable math / solver / config; Windows-only IPC transport) ----
+file(GLOB CORE_SRC ${CMAKE_SOURCE_DIR}/core/src/*.cpp)
+if(NOT WIN32)
+  list(FILTER CORE_SRC EXCLUDE REGEX "ipc_pipe\\.cpp$")
+endif()
+add_library(bodysync_core STATIC ${CORE_SRC})
+target_include_directories(bodysync_core PUBLIC ${CMAKE_SOURCE_DIR}/core/include ${TP}/json)
+
+# ---- tests ----
+add_executable(BodySyncTests
+  tests/test_main.cpp tests/test_math.cpp tests/test_solver.cpp tests/test_config.cpp tests/test_mixed.cpp tests/test_settings_effect.cpp tests/test_human_model.cpp tests/test_v100.cpp)
+target_include_directories(BodySyncTests PRIVATE tests)
+target_link_libraries(BodySyncTests PRIVATE bodysync_core)
+if(WIN32)
+  target_sources(BodySyncTests PRIVATE tests/test_pipe.cpp)
+endif()
+enable_testing()
+add_test(NAME core COMMAND BodySyncTests)
+
+# ---- Windows components ----
+if(WIN32)
+  foreach(d app driver installer)
+    if(EXISTS ${CMAKE_SOURCE_DIR}/${d}/CMakeLists.txt)
+      add_subdirectory(${d})
+    endif()
+  endforeach()
+endif()
