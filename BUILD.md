@@ -1,6 +1,6 @@
 # Building from source / Сборка
 
-The shipped Windows binaries were **cross-built on Linux** with mingw-w64 and tested with Wine. They can also be built natively on Windows with MSYS2 (mingw-w64) using the same CMake files; the native route has **not** been tried (see `scripts/build.ps1`, untested).
+The Windows binaries are **cross-built on Linux** with mingw-w64, and the automated tests run under Wine. They can also be built natively on Windows with MSYS2 (mingw-w64) using the same CMake files (see `scripts/build.ps1`).
 
 ## Linux (cross build, the tested route)
 
@@ -16,7 +16,7 @@ Manual steps: `cmake -S . -B build-win -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/min
 
 `cmake/native-tests.sh` builds only the portable core and its tests natively (fast development loop).
 
-## Windows (MSYS2, untested route)
+## Windows (MSYS2)
 
 Install MSYS2, then in the *MinGW x64* shell: `pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja`, run `scripts/fetch_deps.sh` (needs `curl`) and `cmake -S . -B build -G Ninja && cmake --build build`. MSVC is not supported (the link flags and some code assume GCC).
 

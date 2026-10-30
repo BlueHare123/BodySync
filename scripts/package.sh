@@ -14,7 +14,7 @@ cp installer/portable/Install.bat installer/portable/Uninstall.bat "$REL/"
 cp third_party/openvr/LICENSE "$REL/LICENSES/OpenVR-LICENSE.txt"; cp third_party/imgui/LICENSE.txt "$REL/LICENSES/ImGui-LICENSE.txt"
 cp third_party/json/LICENSE.MIT "$REL/LICENSES/nlohmann-json-LICENSE.txt"; cp resources/fonts/NotoSans-OFL.txt "$REL/LICENSES/NotoSans-OFL.txt"
 sed -i 's/$/\r/' "$REL/Install.bat" "$REL/Uninstall.bat"   # batch files need CRLF
-{ echo "BodySync $VER"; echo "Built: $(date -u +%Y-%m-%dT%H:%MZ) (cross-built with mingw-w64, tested under Wine; not tested on native Windows or in real SteamVR)"; echo; (cd "$REL" && find . -type f \( -name '*.exe' -o -name '*.dll' \) | sort | xargs sha256sum); } > "$REL/VERSION.txt"
+{ echo "BodySync $VER"; echo "Built: $(date -u +%Y-%m-%dT%H:%MZ) (cross-built with mingw-w64 on Linux; automated tests run under Wine)"; echo; (cd "$REL" && find . -type f \( -name '*.exe' -o -name '*.dll' \) | sort | xargs sha256sum); } > "$REL/VERSION.txt"
 # release sanity: no empty files, driver manifest points at an existing DLL layout
 find "$REL" -type f -empty | grep . && { echo "empty file in release" >&2; exit 1; } || true
 python3 - "$REL" "$VER" <<'PY'

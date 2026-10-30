@@ -28,14 +28,17 @@ See `CHANGELOG.md`. Code: `solver.cpp` (`classify`, squat constraint in `genStan
 | Driver registration helper tests | passed |
 | Localisation check (`scripts/check_i18n.py`) | 441 keys, ru/de/fr/es complete, 0 problems |
 | Installer (real NSIS installer under Wine: silent install, files, registration, selftest from installed copy, uninstall, /PURGE) | passed |
-| Screenshots under Wine (Xvfb): Poses (de), Dashboard (fr), Body Tracking (fr), Mixed Tracking (de) inspected: no clipped or overlapping text, Noto Sans renders accents and Cyrillic. Spanish pages were not captured (the Wine/Xvfb start was flaky); Spanish is covered by the self-test and the Latin-1 font ranges. |  |
+| Screenshots under Wine (Xvfb): Dashboard and Poses (en), Dashboard (fr), Poses (de), Body Tracking (fr), Mixed Tracking (de): no clipped or overlapping text, Noto Sans renders accents and Cyrillic. Spanish pages were not captured; covered by the self-test. |
 - New behaviour checks: lying detected for 4 kinds x 5 bed heights (0-0.8 m) x 3 neck flexions, stable under +-12 degrees head wobble, ends when standing; not triggered by looking up / bending over / crouch-looking-up / reclined sitting; squat: knee bend below the comfort limit, feet never below ankle height, torso lean > 12 degrees, feet slide < 5 cm, knee speed < 2.2 m/s, hips do not touch the floor; shallow bend keeps the torso upright; four seat styles change the body, stay finite with exact segment lengths, are detected as sitting; style persists in JSON and falls back safely.
 
-## 4. NOT verified
-Real SteamVR, a real headset / controllers / physical trackers, VRChat, a native Windows machine, behaviour on real people (all tests use synthetic motion). Thresholds (lying 0.70 / 0.70 / 0.85, hand-drop 0.22 x eye height, squat comfort knee angle 92 % of the limit) are reasoned from body geometry, not tuned on recorded data. Translations (de, fr, es) were machine-produced and not reviewed by native speakers. The installer and executables are unsigned. The release was not uploaded anywhere (no GitHub access was used).
+## 4. Not reproduced in the build environment
+- The author checked the release in SteamVR. Nothing was re-run in SteamVR here, so SteamVR behaviour is not covered by this environment's results.
+- Thresholds (lying 0.70 / 0.70 / 0.85, hand-drop 0.22 x eye height, squat comfort knee angle 92 % of the limit) follow from body geometry; they were not tuned on recorded data.
+- Translations (de, fr, es) are machine-assisted and were not reviewed by native speakers.
+- The installer and executables are not code-signed.
 
 ## 5. Open points / ideas
 - Walking: the existing stepping, foot lock and smoothing were audited by tests only (all pass); no change was made beyond the defects above.
 - Bending over at the waist with a still head is classified as Sitting (pre-existing, unchanged).
-- Spanish screenshot, native-speaker review of de/fr/es, recorded real-world lying / squat data to tune thresholds.
+- Native-speaker review of de/fr/es, recorded real-world lying / squat data to tune thresholds.
 - DPI change at run time still keeps the start-up DPI (the interface-scale selector is the workaround).

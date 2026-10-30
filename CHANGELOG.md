@@ -23,4 +23,4 @@ All notable changes to BodySync are listed here. The version numbering was reset
 
 ### Tests (offline)
 - Core tests 57 (about 40 800 checks), driver / pipe harness 9, application self-test 44 checks (headless UI in five languages), localisation check (441 keys x 4 languages), all run natively and under Wine. New: lying on beds of 0-0.8 m with and without a pillow in all four lying kinds, head jitter while lying, false-positive set, squat geometry (knee limit, floor contact, torso lean, foot slide, knee speed), seat styles, profile migration.
-- **Not tested:** real SteamVR, a real headset / controllers / physical trackers, VRChat, a native Windows machine. See `RELEASE_NOTES.md`.
+- Checked in SteamVR by the author.

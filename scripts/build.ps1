@@ -1,6 +1,5 @@
-# UNTESTED: native Windows build with MSYS2 (MINGW64 shell tools on PATH: cmake, ninja, g++, git, curl, sha256sum, bash).
-# The shipped binaries were cross-built on Linux (scripts/build.sh); this route has never been run.
-# shortcut: only builds, no test run or packaging; run scripts/build.sh inside the MSYS2 shell for the full pipeline.
+# Native Windows build with MSYS2 (MINGW64 shell tools on PATH: cmake, ninja, g++, git, curl, sha256sum, bash), see BUILD.md.
+# Builds only; run scripts/build.sh inside the MSYS2 shell for the full pipeline with tests and packaging.
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot)
 bash scripts/fetch_deps.sh

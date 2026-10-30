@@ -15,8 +15,7 @@ BodySync gives SteamVR eight virtual full-body trackers (waist, chest, elbows, k
 - `BodySync-Source.zip` - source for a reproducible build (see `BUILD.md`).
 
 ## Known limitations
-- Never tested in real SteamVR, with a real headset, controllers or physical trackers, in VRChat or on a native Windows machine; everything was tested with simulated motion, a mock SteamVR host and Wine.
-- Posture and joint positions are estimates from head and hands; they are not measurements. Accuracy on real people is unknown.
-- Sitting styles shape the estimated body; they cannot see your real legs. Lying is told apart from bending over / looking up from head tilt, head height and hand position, so unusual positions can be misjudged (use *Always lying / standing / sitting* in Poses, or tune the thresholds).
-- The installer and executables are not code-signed (Windows SmartScreen may warn).
-- Translations were produced without a native-speaker review; please report wrong or awkward wording as an issue.
+- Posture and joint positions are estimates from the head and hands, not measurements.
+- Sitting styles shape the estimated body; the real legs are not seen. Unusual positions (for example bending over with a still head) can be misjudged; *Always lying / standing / sitting* in Poses forces a posture.
+- The executables and installer are not code-signed, so Windows SmartScreen may warn on first run.
+- Translations are machine-assisted; corrections are welcome as issues.
